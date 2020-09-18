@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>TEU2020 | American Energy Society</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id='map'></div>
+    <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZW5lcmd5c29jaWV0eW1hcHMiLCJhIjoiY2s4dWJoZjR1MDBwNDNscWphc2k5dG1qYSJ9.srP3Fb2-ISRmmPTMgN-gBA'; // replace this with your access token
+    var bounds = [[-177, 12.3], [-17.37, 71.08]];
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/energysocietymaps/ckf36i1870e0k19n4qi5v3ocu', // replace this with your style URL
+      center: [-102, 46.91],
+      zoom: 2.5,
+      maxBounds: bounds
+    });
+    // code from the next step will go here
+    map.on('click', function(e) {
+    var features = map.queryRenderedFeatures(e.point, {
+      layers: ['teu2020-elites','teu2020-contributors','teu2020-influencers'] // replace this with the name of the layer
+    });
+    if (!features.length) {
+      return;
+    }
+    var feature = features[0];
+    var popup = new mapboxgl.Popup({ offset: [0,-10], maxWidth : 'none' })
+      .setLngLat(feature.geometry.coordinates)
+      .setHTML('<h3>' + feature.properties.University + '</h3>' + 'Rank: ' + feature.properties.Rank + ' | ' + 'City: ' + feature.properties.City +'<br />' + feature.properties.Website)
+      .addTo(map);
+    });
+    </script>
+  </body>
+</html>
